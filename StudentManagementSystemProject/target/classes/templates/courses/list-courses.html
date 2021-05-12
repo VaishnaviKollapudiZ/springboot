@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>STUDENT COURSE PORTAL</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h3>STUDENT COURSE PORTAL</h3>
+    <hr>
+    <!-- Add a logout button -->
+    <form action="#" th:action="@{/logout}"
+          method="POST">
+        <input type="submit" value="Logout" class="btn btn-outline-primary mt-2" style="float: right;"/>
+    </form>
+    <div>
+        User: <span sec:authentication="name"></span>
+        <br><br>
+        Role(s): <span sec:authentication="principal.authorities"></span>
+        <br><br>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/courses/showFormForAdd}"
+           class="btn btn-primary btn-sm mr-5 mb-3" align="center">
+            ADD COURSE
+        </a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>COURSE NAME </th>
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <th>DELETE COURSE</th>
+            </div>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempCourse : ${courses}">
+
+            <td th:text="${tempCourse.title}" />
+
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+
+                <td>
+                    <a th:href="@{/courses/delete(courseId=${tempCourse.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="if (!(confirm('Are you sure you want to delete this Course?'))) return false">
+                        DELETE
+                    </a>
+                </td>
+            </div>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/students/list}" class="btn btn-primary btn-sm mr-5 mb-3">Back to STUDENT LIST</a>
+
+</div>
+</body>
+</html>
+
+
+
